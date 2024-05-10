@@ -1,6 +1,7 @@
 package com.automation.api.users;
 
 import static io.qameta.allure.SeverityLevel.BLOCKER;
+import static io.qameta.allure.SeverityLevel.CRITICAL;
 import static java.lang.String.format;
 import static org.apache.http.HttpStatus.SC_CREATED;
 import static org.apache.http.HttpStatus.SC_NOT_FOUND;
@@ -90,7 +91,7 @@ public class UsersTest extends UsersBaseTest {
   }
 
   @Test
-  @Severity(BLOCKER)
+  @Severity(CRITICAL)
   @Story("")
   @TmsLink("")
   @Description("Validate deleting user by id")

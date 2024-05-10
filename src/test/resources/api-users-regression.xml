@@ -4,6 +4,7 @@
     <test verbose="2" name="Configurations">
         <classes>
             <class name="com.automation.api.users.UsersTest"/>
+            <class name="com.automation.api.posts.PostsTest"/>
         </classes>
     </test>
 </suite>
