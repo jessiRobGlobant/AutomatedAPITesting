@@ -1,9 +1,14 @@
 package com.automation.api.users;
 
 import static io.qameta.allure.SeverityLevel.BLOCKER;
+import static java.lang.String.format;
 import static org.apache.http.HttpStatus.SC_CREATED;
+import static org.apache.http.HttpStatus.SC_NOT_FOUND;
 import static org.apache.http.HttpStatus.SC_OK;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.equalToObject;
+import static org.hamcrest.Matchers.hasItems;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 
 import com.automation.api.core.users.UsersBaseTest;
 import com.automation.api.dtos.users.User;
@@ -24,7 +29,8 @@ public class UsersTest extends UsersBaseTest {
   public void validateGetAllUsers() {
     usersService.getAllUsers();
 
-    checkThat.hardAssert("Status code is 200 OK", usersService.getStatusCode(), is(SC_OK));
+    checkThat.hardAssert("Status code is 200 OK", usersService.getStatusCode(),
+        is(SC_OK));
     checkThat.softAssert("List of users", usersService.getResponseAsList(), hasItems());
   }
 
@@ -36,8 +42,10 @@ public class UsersTest extends UsersBaseTest {
   public void validateGetUserById() {
     usersService.getUserById("2");
 
-    checkThat.hardAssert("Status code is 200 OK", usersService.getStatusCode(), is(SC_OK));
-    checkThat.softAssert("User information", usersService.getResponseAsObject(), notNullValue());
+    checkThat.hardAssert("Status code is 200 OK", usersService.getStatusCode(),
+        is(SC_OK));
+    checkThat.softAssert("User information", usersService.getResponseAsObject(),
+        notNullValue());
   }
 
   @Test
@@ -47,35 +55,62 @@ public class UsersTest extends UsersBaseTest {
   @Description("Validate posting a new user")
   public void validatePostUser() {
     String userJson = """
-              {
-                  "name": "Leanne Grahams",
-                  "username": "Bret1",
-                  "email": "Sincere3@april.biz",
-                  "address": {
-                    "street": "Kulas Light",
-                    "suite": "Apt. 556",
-                    "city": "Gwenborough",
-                    "zipcode": "92998-3874",
-                    "geo": {
-                      "lat": "-37.3159",
-                      "lng": "81.1496"
-                    }
-                  },
-                  "phone": "1-770-736-8031 x56442",
-                  "website": "hildegard.org",
-                  "company": {
-                    "name": "Romaguera-Crona",
-                    "catchPhrase": "Multi-layered client-server neural-net",
-                    "bs": "harness real-time e-markets"
-                  }
+        {
+            "name": "Leanne Grahams",
+            "username": "Bret1",
+            "email": "Sincere3@april.biz",
+            "address": {
+              "street": "Kulas Light",
+              "suite": "Apt. 556",
+              "city": "Gwenborough",
+              "zipcode": "92998-3874",
+              "geo": {
+                "lat": "-37.3159",
+                "lng": "81.1496"
               }
-              """;
+            },
+            "phone": "1-770-736-8031 x56442",
+            "website": "hildegard.org",
+            "company": {
+              "name": "Romaguera-Crona",
+              "catchPhrase": "Multi-layered client-server neural-net",
+              "bs": "harness real-time e-markets"
+            }
+        }
+        """;
     User newUser = JsonManager.fromJson(userJson, User.class);
     usersService.postNewUser(newUser);
 
-    checkThat.hardAssert("Status code is 201 OK", usersService.getStatusCode(), is(SC_CREATED));
-    checkThat.softAssert("User information", usersService.getResponseAsObject(), notNullValue());
+    checkThat.hardAssert("Status code is 201 OK", usersService.getStatusCode(),
+        is(SC_CREATED));
+    checkThat.softAssert("User information", usersService.getResponseAsObject(),
+        notNullValue());
     checkThat.softAssert("User data includes the details of the created user",
         usersService.getResponseAsObject(), equalToObject(newUser));
+  }
+
+  @Test
+  @Severity(BLOCKER)
+  @Story("")
+  @TmsLink("")
+  @Description("Validate deleting user by id")
+  public void validateDeleteUserById() {
+    String id = "2";
+    // Validate id 2 exists
+    getUserById(id);
+    checkThat.hardAssert(format("Id %s exists", id), usersService.getStatusCode(),
+        is(SC_OK));
+
+    // Tests
+    usersService.deleteUserById(id);
+
+    checkThat.hardAssert("Status code is 200 OK", usersService.getStatusCode(),
+        is(SC_OK));
+    checkThat.softAssert("User information", usersService.getResponseAsObject(),
+        notNullValue());
+
+    getUserById(id);
+    checkThat.softAssert("User was deleted from system", usersService.getStatusCode(),
+        is(SC_NOT_FOUND));
   }
 }

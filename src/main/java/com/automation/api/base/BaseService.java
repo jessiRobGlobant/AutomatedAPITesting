@@ -1,18 +1,17 @@
 package com.automation.api.base;
 
-import io.qameta.allure.restassured.AllureRestAssured;
-import io.restassured.RestAssured;
-
-import static com.automation.core.Constants.BASE_URI;
-import static com.automation.core.Constants.USERS_URI;
 import static io.restassured.RestAssured.given;
 import static io.restassured.http.ContentType.JSON;
+
+import io.qameta.allure.restassured.AllureRestAssured;
+import io.restassured.RestAssured;
 import io.restassured.response.Response;
-import java.util.Map;
 import lombok.Getter;
 
 
-/** Class to model the Base service. */
+/**
+ * Class to model the Base service.
+ */
 @Getter
 public abstract class BaseService implements ApiService {
 
@@ -27,7 +26,7 @@ public abstract class BaseService implements ApiService {
    * This is a function to create a Get request.
    *
    * @param baseUri base uri of the request
-   * @param path path in which the request is going to be made
+   * @param path    path in which the request is going to be made
    */
   protected void requestGet(String baseUri, String path) {
     response =
@@ -40,12 +39,32 @@ public abstract class BaseService implements ApiService {
   }
 
   /**
+   * This is a function to get element by a param using rest assured.
+   *
+   * @param baseUri    base uri of the request
+   * @param path       path in which the request is going to be made
+   * @param paramField param string in the path
+   * @param param      param which is going to be retrieved
+   */
+  protected void requestGetByParam(String baseUri, String path,
+                                   String paramField, String param) {
+    response =
+        given()
+            .filter(new AllureRestAssured())
+            .baseUri(baseUri)
+            .basePath(path)
+            .pathParam(paramField, param)
+            .contentType(JSON)
+            .when()
+            .get();
+  }
+
+  /**
    * This is a function to create a new element using rest assured.
    *
    * @param baseUri base uri of the request
-   * @param path path in which the request is going to be made
-   * @param body model object
-   * @return Response
+   * @param path    path in which the request is going to be made
+   * @param body    model object
    */
   protected void requestPost(String baseUri, String path, Object body) {
     response = RestAssured.given()
@@ -54,5 +73,26 @@ public abstract class BaseService implements ApiService {
         .body(body)
         .when()
         .post(path);
+  }
+
+  /**
+   * This is a function to delete element by a param using rest assured.
+   *
+   * @param baseUri    base uri of the request
+   * @param path       path in which the request is going to be made
+   * @param paramField param string in the path
+   * @param param      param which is going to be deleted
+   */
+  protected void requestDeleteByParam(String baseUri, String path,
+                                      String paramField, String param) {
+    response =
+        given()
+            .filter(new AllureRestAssured())
+            .baseUri(baseUri)
+            .basePath(path)
+            .pathParam(paramField, param)
+            .contentType(JSON)
+            .when()
+            .delete();
   }
 }
