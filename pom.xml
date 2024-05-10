@@ -14,6 +14,7 @@
         <commonscodec.version>1.17.0</commonscodec.version>
         <testng.version>7.10.2</testng.version>
         <lombok.version>1.18.32</lombok.version>
+        <gson.version>2.10.1</gson.version>
         <jackson.version>2.17.1</jackson.version>
         <faker.version>2.2.2</faker.version>
         <hamcrest.version>2.2</hamcrest.version>
@@ -81,6 +82,12 @@
             <artifactId>allure-testng</artifactId>
             <version>${allure.version}</version>
             <scope>test</scope>
+        </dependency>
+        <!-- Gson for JSON serialization/deserialization -->
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>${gson.version}</version>
         </dependency>
     </dependencies>
 

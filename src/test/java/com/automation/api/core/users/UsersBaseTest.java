@@ -1,6 +1,7 @@
 package com.automation.api.core.users;
 
 import com.automation.api.core.base.BaseTest;
+import com.automation.api.dtos.users.User;
 import com.automation.api.services.UsersService;
 import org.testng.annotations.BeforeMethod;
 
@@ -12,4 +13,5 @@ public class UsersBaseTest extends BaseTest {
   public void beforeMethod() {
     usersService = new UsersService();
   }
+
 }

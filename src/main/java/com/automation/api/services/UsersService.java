@@ -1,6 +1,9 @@
 package com.automation.api.services;
 
-import static com.automation.core.Constants.*;
+import static com.automation.core.Constants.BASE_URI;
+import static com.automation.core.Constants.USERS_URI;
+import static com.automation.core.Constants.USER_ID_FIELD;
+import static com.automation.core.Constants.USER_ID_PATH;
 import static io.restassured.RestAssured.given;
 import static io.restassured.http.ContentType.JSON;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
@@ -13,6 +16,11 @@ import java.util.List;
 /** User API services. */
 public class UsersService extends BaseService {
 
+  /**
+   * Convert the response to a User object.
+   *
+   * @return User
+   */
   @Override
   public User getResponseAsObject() {
     return response.getBody().as(User.class);
@@ -25,13 +33,7 @@ public class UsersService extends BaseService {
 
   /** Endpoint for obtain all users. */
   public void getAllUsers() {
-    response =
-        given()
-            .filter(new AllureRestAssured())
-            .baseUri(BASE_URI)
-            .contentType(JSON)
-            .when()
-            .get(USERS_URI);
+    requestGet(BASE_URI, USERS_URI);
   }
 
   /**
@@ -49,5 +51,14 @@ public class UsersService extends BaseService {
             .contentType(JSON)
             .when()
             .get();
+  }
+
+  /**
+   * Endpoint to create a new user.
+   *
+   * @param newUser User that is going to be posted
+   */
+  public void postNewUser(User newUser) {
+    requestPost(BASE_URI, USERS_URI, newUser);
   }
 }
