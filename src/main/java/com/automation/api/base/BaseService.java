@@ -4,7 +4,6 @@ import static io.restassured.RestAssured.given;
 import static io.restassured.http.ContentType.JSON;
 
 import io.qameta.allure.restassured.AllureRestAssured;
-import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import lombok.Getter;
 
@@ -67,12 +66,15 @@ public abstract class BaseService implements ApiService {
    * @param body    model object
    */
   protected void requestPost(String baseUri, String path, Object body) {
-    response = RestAssured.given()
-        .baseUri(baseUri)
-        .contentType(JSON)
-        .body(body)
-        .when()
-        .post(path);
+    response =
+        given()
+            .filter(new AllureRestAssured())
+            .baseUri(baseUri)
+            .basePath(path)
+            .contentType(JSON)
+            .body(body)
+            .when()
+            .post();
   }
 
   /**
@@ -94,5 +96,28 @@ public abstract class BaseService implements ApiService {
             .contentType(JSON)
             .when()
             .delete();
+  }
+
+  /**
+   * This is a function to patch an element by a param using rest assured.
+   *
+   * @param baseUri    base uri of the request
+   * @param path       path in which the request is going to be made
+   * @param paramField param string in the path
+   * @param param      param which is going to be deleted
+   * @param body       model object
+   */
+  protected void requestPatchByParam(String baseUri, String path,
+                                     String paramField, String param, String body) {
+    response =
+        given()
+            .filter(new AllureRestAssured())
+            .baseUri(baseUri)
+            .basePath(path)
+            .pathParam(paramField, param)
+            .contentType(JSON)
+            .body(body)
+            .when()
+            .patch();
   }
 }

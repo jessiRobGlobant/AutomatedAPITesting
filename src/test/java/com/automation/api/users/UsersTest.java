@@ -3,6 +3,7 @@ package com.automation.api.users;
 import static io.qameta.allure.SeverityLevel.BLOCKER;
 import static io.qameta.allure.SeverityLevel.CRITICAL;
 import static java.lang.String.format;
+import static org.apache.http.HttpStatus.SC_BAD_REQUEST;
 import static org.apache.http.HttpStatus.SC_CREATED;
 import static org.apache.http.HttpStatus.SC_NOT_FOUND;
 import static org.apache.http.HttpStatus.SC_OK;
@@ -113,5 +114,25 @@ public class UsersTest extends UsersBaseTest {
     getUserById(id);
     checkThat.softAssert("User was deleted from system", usersService.getStatusCode(),
         is(SC_NOT_FOUND));
+  }
+
+  @Test
+  @Severity(BLOCKER)
+  @Story("")
+  @TmsLink("")
+  @Description("Validate posting a new user with a wrong structure")
+  public void validateWrongPostUser() {
+    String userJson = """
+        {
+             "userId": 1,
+             "title": "qui est esse",
+             "body": "a body"
+         }
+        """;
+
+    usersService.postNewUser(userJson);
+
+    checkThat.hardAssert("Status code is 400", usersService.getStatusCode(),
+        is(SC_BAD_REQUEST));
   }
 }

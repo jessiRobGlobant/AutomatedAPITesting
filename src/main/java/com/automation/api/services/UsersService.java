@@ -56,6 +56,15 @@ public class UsersService extends BaseService {
   }
 
   /**
+   * Endpoint to create a new user.
+   *
+   * @param newUser Json of the user that is going to be posted
+   */
+  public void postNewUser(String newUser) {
+    requestPost(BASE_URI, USERS_URI, newUser);
+  }
+
+  /**
    * Endpoint to delete a user by id.
    *
    * @param userId ID of the user

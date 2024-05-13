@@ -63,4 +63,14 @@ public class PostsService extends BaseService {
   public void deletePostById(String postId) {
     requestDeleteByParam(BASE_URI, POSTS_URI + POST_ID_PATH, POST_ID_FIELD, postId);
   }
+
+  /**
+   * Endpoint to patch a post by id.
+   *
+   * @param postId ID of the post
+   * @param body   body with the modification
+   */
+  public void patchPostById(String postId, String body) {
+    requestPatchByParam(BASE_URI, POSTS_URI + POST_ID_PATH, POST_ID_FIELD, postId, body);
+  }
 }
