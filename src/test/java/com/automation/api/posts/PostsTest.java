@@ -14,7 +14,6 @@ import static org.hamcrest.Matchers.nullValue;
 
 import com.automation.api.core.posts.PostsBaseTest;
 import com.automation.api.dtos.posts.Post;
-import com.automation.utils.JsonManager;
 import io.qameta.allure.Description;
 import io.qameta.allure.Severity;
 import io.qameta.allure.Story;
@@ -56,14 +55,11 @@ public class PostsTest extends PostsBaseTest {
   @TmsLink("")
   @Description("Validate posting a new post")
   public void validatePostPost() {
-    String postJson = """
-        {
-            "userId": 1,
-            "title": "new post",
-            "body": "body of a new post"
-        }
-        """;
-    Post newPost = JsonManager.fromJson(postJson, Post.class);
+    Post newPost = Post.builder()
+        .id(1)
+        .title("new post")
+        .body("body of a new post")
+        .build();
     postsService.postNewPost(newPost);
 
     checkThat.hardAssert("Status code is 201 OK", postsService.getStatusCode(),

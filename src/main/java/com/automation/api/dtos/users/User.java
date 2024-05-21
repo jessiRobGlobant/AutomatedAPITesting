@@ -1,11 +1,17 @@
 package com.automation.api.dtos.users;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 
-/** DTO for model User. */
+/**
+ * DTO for model User.
+ */
 @Data
-@RequiredArgsConstructor
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class User {
 
   private int id;
